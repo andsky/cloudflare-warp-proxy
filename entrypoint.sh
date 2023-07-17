@@ -1,5 +1,5 @@
 #!/bin/bash
-warp-svc &
+warp-svc >> /dev/null &
 
 while [[ ! -S /run/cloudflare-warp/warp_service ]]; do sleep 1; done
 
