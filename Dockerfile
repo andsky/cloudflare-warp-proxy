@@ -9,11 +9,11 @@ RUN curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor
 
 
 FROM debian:bookworm-slim
-RUN apt update && apt install -y libdbus-1-3
-RUN apt update && apt install -y libdbus-1-3 
+RUN apt update && apt install -y --no-install-recommends socat libdbus-1-3 
 RUN apt autoremove -y && \
 	apt clean -y &&\
-	rm -rf /var/lib/apt/lists/*
+	rm -rf /var/lib/{apt,dpkg,cache,log}
+
 COPY --from=build /usr/bin/warp-cli /usr/bin/warp-svc /usr/local/bin/
 COPY --chmod=755 entrypoint.sh entrypoint.sh
 EXPOSE 40000/tcp
