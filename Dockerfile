@@ -12,4 +12,4 @@ RUN curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor
 
 COPY --chmod=755 entrypoint.sh entrypoint.sh
 EXPOSE 40000/tcp
-CMD ["./entrypoint.sh"]
+CMD ["bash", "-c", "/entrypoint.sh"]
