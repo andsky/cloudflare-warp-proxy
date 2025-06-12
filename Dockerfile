@@ -9,7 +9,7 @@ RUN curl -fsSL https://pkg.cloudflareclient.com/pubkey.gpg | gpg --yes --dearmor
 
 
 FROM debian:bookworm-slim
-RUN apt update && apt install -y --no-install-recommends socat libdbus-1-3 
+RUN apt update && apt install -y --no-install-recommends socat libdbus-1-3 libnspr4 
 RUN apt autoremove -y && \
 	apt clean -y &&\
 	rm -rf /var/lib/{apt,dpkg,cache,log}
