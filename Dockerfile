@@ -1,4 +1,4 @@
-FROM debian:trixie
+FROM debian:bookworm
 #FROM debian:bookworm AS build
 
 RUN apt update && apt install -y curl gnupg2 lsb-release libcap2-bin iputils-ping
