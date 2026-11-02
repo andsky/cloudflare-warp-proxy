@@ -30,14 +30,16 @@ jobs:
           sudo apt-get install -y cloudflare-warp
       - name: Prepare Docker image build metadata
         run: |
-          VERSION=$(warp-cli --version | awk '{print $2}')
-          repository=${{ github.repository }}
-          IMAGE_NAME=${{ github.actor }}/${repository##*/}
-          IMAGE_NAME_VERSION=${{ github.actor }}/${repository##*/}:$VERSION
-          echo IMAGE_NAME=$IMAGE_NAME
-          echo IMAGE_NAME_VERSION=$IMAGE_NAME_VERSION
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
-          echo "IMAGE_NAME_VERSION=$IMAGE_NAME_VERSION" >> $GITHUB_ENV
+          # CLI version output can include build information on additional lines.
+          VERSION=$(dpkg-query --show --showformat='${Version}' cloudflare-warp)
+          if [[ ! "$VERSION" =~ ^[a-zA-Z0-9_][a-zA-Z0-9_.-]{0,127}$ ]]; then
+            echo "::error::Invalid WARP package version for a Docker tag"
+            exit 1
+          fi
+          IMAGE_NAME="${GITHUB_ACTOR}/${GITHUB_REPOSITORY##*/}"
+          IMAGE_NAME_VERSION="${IMAGE_NAME}:${VERSION}"
+          printf '%s\n' "IMAGE_NAME=$IMAGE_NAME" "IMAGE_NAME_VERSION=$IMAGE_NAME_VERSION"
+          printf '%s\n' "IMAGE_NAME=$IMAGE_NAME" "IMAGE_NAME_VERSION=$IMAGE_NAME_VERSION" >> "$GITHUB_ENV"
       - name: Log in to Docker Hub
         uses: docker/login-action@v4
         with:
