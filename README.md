@@ -30,3 +30,18 @@ You can verify the connection is routed through Cloudflare WARP using `curl`:
 curl --socks5 127.0.0.1:40000 https://www.cloudflare.com/cdn-cgi/trace
 ```
 (Look for `warp=on` or `warp=plus` in the output)
+
+## Restart Behavior
+
+The entrypoint waits for the WARP daemon to respond before configuring the proxy.
+If either `warp-svc` or `rinetd` exits, the container stops so its restart policy
+can recover the service. Daemon output is available through `docker logs cloudflare-warp`.
+
+## Tests
+
+Run the startup and process lifecycle regression tests on Linux with Bash,
+Python 3, and GNU coreutils installed:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
