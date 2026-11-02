@@ -12,9 +12,9 @@ RUN apt-get update && \
         | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends cloudflare-warp && \
-    apt-get autoremove -y && \
+    apt-get purge -y --auto-remove gnupg2 lsb-release && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /var/cache/apt/archives/*
 
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
