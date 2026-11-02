@@ -4,7 +4,8 @@ Docker image to run cloudflare-warp in proxy mode.
 
 ## Usage
 
-Run the container using the following command. It is highly recommended to mount a volume for registration persistence and add necessary network capabilities.
+Run with `NET_ADMIN` and the IPv6 setting shown below. Mounting
+`/var/lib/cloudflare-warp` preserves registration when recreating the container.
 
 ```bash
 docker run -d \

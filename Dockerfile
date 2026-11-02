@@ -3,6 +3,7 @@ FROM debian:trixie-slim
 LABEL maintainer="andsky"
 LABEL description="Cloudflare WARP SOCKS5 proxy in Docker"
 
+# cloudflare-warp depends on gnupg2; purging it would also remove WARP.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         curl gnupg2 lsb-release ca-certificates rinetd && \
@@ -12,9 +13,13 @@ RUN apt-get update && \
         | tee /etc/apt/sources.list.d/cloudflare-client.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends cloudflare-warp && \
-    apt-get purge -y --auto-remove gnupg2 lsb-release && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /var/cache/apt/archives/*
+    rm -rf /var/lib/apt/lists/* /usr/share/doc/* /usr/share/man/* /var/cache/apt/archives/* && \
+    command -v warp-svc && \
+    command -v warp-cli && \
+    command -v rinetd && \
+    command -v curl && \
+    command -v timeout
 
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
 
